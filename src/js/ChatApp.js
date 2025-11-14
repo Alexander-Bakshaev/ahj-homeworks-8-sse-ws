@@ -7,19 +7,20 @@ export default class ChatApp {
 
     // Обработчики событий WebSocket
     this.ws.onopen = () => {
-      console.log('WebSocket соединение установлено');
+      console.log("WebSocket соединение установлено");
       this.isConnected = true;
       this.flushMessageQueue();
     };
 
     this.ws.onerror = (error) => {
-      console.error('WebSocket ошибка:', error);
-      document.getElementById("errorMessage").textContent = "Ошибка соединения с сервером";
+      console.error("WebSocket ошибка:", error);
+      document.getElementById("errorMessage").textContent =
+        "Ошибка соединения с сервером";
       document.getElementById("errorMessage").style.display = "block";
     };
 
     this.ws.onclose = () => {
-      console.log('WebSocket соединение закрыто');
+      console.log("WebSocket соединение закрыто");
       this.isConnected = false;
     };
 
@@ -58,14 +59,15 @@ export default class ChatApp {
     this.nickname = document.getElementById("nicknameInput").value.trim();
 
     if (!this.nickname) {
-      document.getElementById("errorMessage").textContent = "Пожалуйста, введите никнейм";
+      document.getElementById("errorMessage").textContent =
+        "Пожалуйста, введите никнейм";
       document.getElementById("errorMessage").style.display = "block";
       return;
     }
 
     this.sendMessage({
       type: "register",
-      nickname: this.nickname
+      nickname: this.nickname,
     });
   }
 
@@ -77,7 +79,7 @@ export default class ChatApp {
       this.sendMessage({
         type: "message",
         nickname: this.nickname,
-        message: message
+        message: message,
       });
 
       e.target.value = "";
@@ -89,13 +91,13 @@ export default class ChatApp {
     if (!userList) return;
 
     userList.innerHTML = users
-      .map(user => {
+      .map((user) => {
         const isCurrentUser = user === this.nickname;
         return `
           <div class="user-item">
               <div class="avatar"></div>
-              <div class="user-name ${isCurrentUser ? 'you' : ''}">
-                ${isCurrentUser ? 'You' : user}
+              <div class="user-name ${isCurrentUser ? "you" : ""}">
+                ${isCurrentUser ? "You" : user}
               </div>
           </div>
         `;
@@ -107,8 +109,8 @@ export default class ChatApp {
   formatTimestamp(timestamp) {
     const date = timestamp ? new Date(timestamp) : new Date();
     return {
-      time: date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
-      date: date.toLocaleDateString()
+      time: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      date: date.toLocaleDateString(),
     };
   }
 
@@ -119,7 +121,7 @@ export default class ChatApp {
     const messageElement = document.createElement("div");
     messageElement.classList.add("message");
 
-    const {time, date} = this.formatTimestamp(data.timestamp);
+    const { time, date } = this.formatTimestamp(data.timestamp);
     const isCurrentUser = data.nickname === this.nickname;
 
     if (isCurrentUser) {
@@ -166,11 +168,11 @@ export default class ChatApp {
     };
 
     scrollUp.addEventListener("click", () => {
-      chatBox.scrollBy({top: -50, behavior: "smooth"});
+      chatBox.scrollBy({ top: -50, behavior: "smooth" });
     });
 
     scrollDown.addEventListener("click", () => {
-      chatBox.scrollBy({top: 50, behavior: "smooth"});
+      chatBox.scrollBy({ top: 50, behavior: "smooth" });
     });
 
     chatBox.addEventListener("scroll", updateScrollThumb);
@@ -208,7 +210,7 @@ export default class ChatApp {
     if (!messagesContainer) return;
 
     const messageElement = document.createElement("div");
-    messageElement.className = 'system-message';
+    messageElement.className = "system-message";
     messageElement.textContent = message;
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -218,7 +220,7 @@ export default class ChatApp {
     this.ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        console.log('Получено сообщение:', data);
+        console.log("Получено сообщение:", data);
 
         switch (data.type) {
           case "registered":
@@ -229,9 +231,10 @@ export default class ChatApp {
             break;
 
           case "error":
-            const errorMessage = data.message === "Nickname is already taken"
-              ? "Этот никнейм уже занят"
-              : data.message;
+            const errorMessage =
+              data.message === "Nickname is already taken"
+                ? "Этот никнейм уже занят"
+                : data.message;
             document.getElementById("errorMessage").textContent = errorMessage;
             document.getElementById("errorMessage").style.display = "block";
             break;
@@ -247,30 +250,30 @@ export default class ChatApp {
           case "history":
             if (data.messages && data.messages.length > 0) {
               // Добавляем сообщение о загрузке истории
-              this.appendSystemMessage('Загружена история сообщений:');
+              this.appendSystemMessage("Загружена история сообщений:");
 
               // Добавляем все сообщения из истории
-              data.messages.forEach(msg => {
+              data.messages.forEach((msg) => {
                 this.appendMessage({
                   nickname: msg.nickname,
                   message: msg.message,
-                  timestamp: msg.timestamp
+                  timestamp: msg.timestamp,
                 });
               });
             }
             break;
 
           default:
-            console.log('Неизвестный тип сообщения:', data.type);
+            console.log("Неизвестный тип сообщения:", data.type);
         }
       } catch (error) {
-        console.error('Ошибка обработки сообщения:', error, event.data);
+        console.error("Ошибка обработки сообщения:", error, event.data);
       }
     };
 
     // Обработка закрытия соединения
     this.ws.onclose = () => {
-      console.log('Соединение с сервером закрыто');
+      console.log("Соединение с сервером закрыто");
       this.isConnected = false;
     };
   }
