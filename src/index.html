@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+</head>
+<body>
+  <div id="nicknameModal">
+    <div class="modal-content">
+      <h2>Выберите псевдоним</h2>
+      <input type="text" id="nicknameInput">
+      <button id="continueButton">Продолжить</button>
+      <div id="errorMessage" style="color: red; margin-top: 10px; display: none;"></div>
+    </div>
+  </div>
+  <div id="chatContainer" style="display:none;">
+    <div id="userList"></div>
+    <div id="chatWrapper">
+      <div id="chatBox">
+        <div id="messagesContainer">
+        </div>
+        <div id="customScrollBar">
+          <div id="scrollUp" class="scrollButton">▲</div>
+          <div id="customScrollThumb"></div>
+          <div id="scrollDown" class="scrollButton">▼</div>
+        </div>
+      </div>
+      <input type="text" id="messageInput" placeholder="Type your message here">
+    </div>
+  </div>
+</body>
+</html>
