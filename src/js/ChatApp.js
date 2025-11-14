@@ -223,14 +223,15 @@ export default class ChatApp {
         console.log("Получено сообщение:", data);
 
         switch (data.type) {
-          case "registered":
+          case "registered": {
             document.getElementById("nicknameModal").style.display = "none";
             document.getElementById("chatContainer").style.display = "flex";
             document.getElementById("errorMessage").style.display = "none";
             this.setupCustomScrollbar();
             break;
+          }
 
-          case "error":
+          case "error": {
             const errorMessage =
               data.message === "Nickname is already taken"
                 ? "Этот никнейм уже занят"
@@ -238,21 +239,22 @@ export default class ChatApp {
             document.getElementById("errorMessage").textContent = errorMessage;
             document.getElementById("errorMessage").style.display = "block";
             break;
+          }
 
-          case "users":
+          case "users": {
             this.updateUserList(data.users);
             break;
+          }
 
-          case "message":
+          case "message": {
             this.appendMessage(data);
             break;
+          }
 
-          case "history":
+          case "history": {
             if (data.messages && data.messages.length > 0) {
-              // Добавляем сообщение о загрузке истории
               this.appendSystemMessage("Загружена история сообщений:");
 
-              // Добавляем все сообщения из истории
               data.messages.forEach((msg) => {
                 this.appendMessage({
                   nickname: msg.nickname,
@@ -262,9 +264,11 @@ export default class ChatApp {
               });
             }
             break;
+          }
 
-          default:
+          default: {
             console.log("Неизвестный тип сообщения:", data.type);
+          }
         }
       } catch (error) {
         console.error("Ошибка обработки сообщения:", error, event.data);
